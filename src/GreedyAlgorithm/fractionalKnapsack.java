@@ -1,4 +1,4 @@
-package Binary_Search;
+package GreedyAlgorithm;
 import java.util.*;
 public class fractionalKnapsack {
         double fractionalKnapsack(int[] values, int[] weights, int W) {

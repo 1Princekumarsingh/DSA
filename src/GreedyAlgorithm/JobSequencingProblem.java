@@ -1,4 +1,4 @@
-package Binary_Search;
+package GreedyAlgorithm;
 import java.util.*;
 public class JobSequencingProblem {
 

@@ -1,4 +1,4 @@
-package Binary_Search;
+package GreedyAlgorithm;
 import java.util.*;
 public class N_meetings_in_one_room_gfg {
 
