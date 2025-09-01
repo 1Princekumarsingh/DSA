@@ -1,87 +1,82 @@
 package Heap;
 
-public class heapImpl {
-    int heapSize;
-    int heap[];
-    int capacity;
-    heapImpl(int[] arr){
-        heap = arr;
-        heapSize = arr.length;
-        capacity = arr.length;
-    }
-    public void swap(int i, int j){
-        int temp = heap[i];
-        heap[i] = heap[j];
-        heap[i] = temp;
-    }
-    public  void heapify(int i){
-        int largest = i;
-        int leftChildIdx = i*2+1;
-        int rightChildIdx = i*2+2;
+class heapImpl {//max heap
+        private int[] heap;
+        private int size;
+        private int capacity;
 
-        if(leftChildIdx<heapSize && heap[leftChildIdx]>heap[largest]) largest = leftChildIdx;
-        if(rightChildIdx<heapSize && heap[rightChildIdx]>heap[largest]) largest = rightChildIdx;
+        public heapImpl(int capacity) {
+            this.capacity = capacity;
+            this.size = 0;
+            heap = new int[capacity];
+        }
 
-        if(largest!=i){//check if parent changed, if yes then swap
-            swap(i, largest);
-//            heapify(largest);
+        private void swap(int i, int j) {
+            int temp = heap[i];
+            heap[i] = heap[j];
+            heap[j] = temp;
         }
-    }
-    public void buildTree(){
-        //leaf ->n/2 to n-1
-        //root -> 0 to n/2 -1
-        for(int i=heapSize/2-1; i>=0; i--){
-            heapify(i);
-        }
-    }
-    public int extractMax(){
-        if(heapSize== 0) {
-            System.out.println("Heap is empty!");
-            return -1;
-        }
-        int max = heap[0];
-        heap[0] = heap[heapSize-1];
-        heapSize--;
-        heapify(0);
-        return max;
-    }
-    public void increaseKey(int idx, int val){
-        if(idx<0 || idx>=heapSize || val<heap[idx]){
-            System.out.println("Wrong Operarion!");
-            return;
-        }
-        heap[idx] = val;
-        heapify(idx);
-    }
-    public void decreaseKey(int idx, int val){
-        if(idx<0 || idx>=heapSize || val>heap[idx]){
-            System.out.println("Wrong Operarion!");
-            return;
-        }
-        heap[idx] = val;
-        heapify(idx);
-    }
-    public  void insert(int val){
-        if(heapSize==capacity){
-            System.out.println("Wrong Operation!");
-            return;
-        }
-        heap[heapSize] = val;
-        heapify(heapSize);
-        heapSize++;
-    }
-    public void display(){
-        for(int i=0; i<heapSize; i++){
-            System.out.print(heap[i] + " ");
-        }
-        System.out.println();
-    }
-    public static void main(String[] args) {
-        int[] arr = {10,5,20,6,11};
-        heapImpl heap=new heapImpl(arr);
-        heap.buildTree();
-        heap.display();
-        int removedMax = heap.extractMax();
 
+        private void heapifyUp(int i) {//bubble up
+            int parent = (i - 1) / 2;
+            if(i > 0 && heap[i] > heap[parent]) {
+                swap(i, parent);
+                heapifyUp(parent);
+            }
+        }
+
+        private void heapifyDown(int i) {//bubble down
+            int largest = i;
+            int left = 2*i + 1, right = 2*i + 2;
+
+            if(left < size && heap[left] > heap[largest]) largest = left;
+            if(right < size && heap[right] > heap[largest]) largest = right;
+
+            if(largest != i) {
+                swap(i, largest);
+                heapifyDown(largest);
+            }
+        }
+
+        public void insert(int val) {
+            if(size == capacity) {
+                System.out.println("Heap is full!");
+                return;
+            }
+            heap[size] = val;
+            size++;
+            heapifyUp(size - 1);
+        }
+
+        public int extractMax() {
+            if(size == 0) {
+                System.out.println("Heap is empty!");
+                return -1;
+            }
+            int max = heap[0];
+            heap[0] = heap[size - 1];
+            size--;
+            heapifyDown(0);
+            return max;
+        }
+
+        public void display() {
+            for(int i = 0; i < size; i++) System.out.print(heap[i] + " ");
+            System.out.println();
+        }
+
+        public static void main(String[] args) {
+            heapImpl maxHeap = new heapImpl(10);
+            maxHeap.insert(10);
+            maxHeap.insert(5);
+            maxHeap.insert(20);
+            maxHeap.insert(6);
+            maxHeap.insert(11);
+
+            System.out.print("Max-Heap: ");
+            maxHeap.display();
+
+            System.out.println("Extract Max: " + maxHeap.extractMax());
+            maxHeap.display();
+        }
     }
-}
